@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Record Payment{% endblock %}
+{% block page_title %}Record Payment{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('payments') }}">Payments</a><span class="bc-sep">/</span>Record{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><div class="ph-title">Record <em>Payment</em></div></div>
+  <a href="{{ url_for('payments') }}" class="btn btn-ghost">← Back</a>
+</div>
+<div style="max-width:700px;">
+<form method="POST">
+  <div class="form-card">
+    <div class="form-card-head"><div class="form-card-title">Payment Details</div></div>
+    <div class="form-body">
+      <div class="form-grid">
+        <div class="fg">
+          <label>Patient Name ✦</label>
+          <select name="patient" class="fsel2" required>
+            <option value="">Select patient</option>
+            {% for p in patients %}
+            <option value="{{ p['name'] }}">{{ p['name'] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Amount ($) ✦</label>
+          <input type="number" name="amount" class="finp" required step="0.01" min="0" placeholder="e.g. 250.00"/>
+        </div>
+        <div class="fg">
+          <label>Payment Type ✦</label>
+          <select name="payment_type" class="fsel2" required>
+            <option value="">Select type</option>
+            {% for t in ['Consultation','Pharmacy','Lab Test','Surgery','Emergency','Other'] %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Payment Method ✦</label>
+          <select name="method" class="fsel2" required>
+            <option value="">Select method</option>
+            {% for m in ['Cash','Card','Insurance','Online','Easypaisa','JazzCash','Bank Transfer'] %}
+            <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Status</label>
+          <select name="status" class="fsel2">
+            {% for s in ['Paid','Pending','Partial','Failed','Refunded'] %}
+            <option value="{{ s }}" {% if s=='Paid' %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <a href="{{ url_for('payments') }}" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary">💾 Record Payment</button>
+    </div>
+  </div>
+</form>
+</div>
+{% endblock %}
