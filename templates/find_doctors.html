@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Find Doctors – MediCare Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0b1d35;--teal:#0a907d;--teal2:#0dbea8;--teal-bg:rgba(10,144,125,.08);--teal-bd:rgba(10,144,125,.22);--cream:#f5f7fa;--white:#fff;--border:#e4e9f0;--gray:#7b8a9a;--text:#1e2d3d;--red:#e05454;--green:#22a86e;--sh:0 2px 8px rgba(11,29,53,.07);--sh-md:0 8px 28px rgba(11,29,53,.11);--r:16px;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+nav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;border-bottom:1px solid rgba(13,190,168,.18);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700;}
+.logo-text{font-size:1.05rem;font-weight:700;color:#fff;}
+.logo-text span{color:var(--teal2);}
+.nav-right{display:flex;align-items:center;gap:22px;}
+.nav-right a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.84rem;font-weight:500;transition:color .2s;}
+.nav-right a:hover,.nav-right a.active{color:#fff;}
+.nav-btn{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff !important;padding:8px 18px;border-radius:8px;font-weight:600 !important;}
+.page-header{background:linear-gradient(135deg,var(--navy) 0%,#112240 100%);padding:44px 5% 40px;position:relative;overflow:hidden;}
+.page-header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(13,190,168,.12) 0%,transparent 60%);pointer-events:none;}
+.page-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);color:#fff;font-weight:700;margin-bottom:6px;position:relative;z-index:1;}
+.page-header p{color:rgba(255,255,255,.55);font-size:.93rem;position:relative;z-index:1;}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:.78rem;color:rgba(255,255,255,.35);margin-bottom:16px;position:relative;z-index:1;}
+.breadcrumb a{color:var(--teal2);text-decoration:none;}
+.search-wrap{padding:26px 5% 0;}
+.search-bar{background:#fff;border-radius:14px;padding:6px 6px 6px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-md);border:1.5px solid var(--border);transition:border-color .2s,box-shadow .2s;}
+.search-bar:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px rgba(10,144,125,.1),var(--sh-md);}
+.search-bar input{flex:1;border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;color:var(--text);background:transparent;}
+.search-bar input::placeholder{color:var(--gray);}
+.search-btn{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:10px;padding:11px 26px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.search-btn:hover{opacity:.9;transform:translateY(-1px);}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:22px;padding:26px 5% 60px;max-width:1360px;margin:0 auto;}
+.sidebar{display:flex;flex-direction:column;gap:16px;}
+.filter-card{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--sh);border:1px solid var(--border);}
+.filter-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:14px;}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:9px;cursor:pointer;transition:all .18s;border:1.5px solid transparent;}
+.filter-item:hover{background:var(--teal-bg);}
+.filter-item.active{background:var(--teal-bg);border-color:var(--teal-bd);}
+.filter-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+.filter-label{font-size:.875rem;font-weight:500;color:var(--text);flex:1;margin-left:9px;}
+.filter-item.active .filter-label{color:var(--teal);font-weight:600;}
+.filter-count{font-size:.7rem;font-weight:600;background:var(--cream);color:var(--gray);padding:1px 7px;border-radius:20px;}
+.filter-item.active .filter-count{background:rgba(10,144,125,.15);color:var(--teal);}
+.main-content{min-width:0;}
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.results-info{font-size:.9rem;color:var(--gray);}
+.results-info strong{color:var(--text);}
+.doc-card{background:#fff;border-radius:var(--r);border:1.5px solid var(--border);padding:20px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start;box-shadow:var(--sh);transition:all .25s;position:relative;overflow:hidden;animation:cardIn .4s ease both;margin-bottom:14px;}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.doc-card:hover{border-color:var(--teal);box-shadow:var(--sh-md);transform:translateY(-2px);}
+.doc-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--teal),var(--teal2));opacity:0;transition:opacity .25s;border-radius:4px 0 0 4px;}
+.doc-card:hover::before{opacity:1;}
+.doc-photo{width:100px;height:100px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:46px;border:2px solid var(--border);flex-shrink:0;}
+.doc-info{min-width:0;}
+.doc-name{font-size:1.08rem;font-weight:700;color:var(--navy);font-family:'Playfair Display',serif;margin-bottom:4px;}
+.doc-spec{display:inline-block;background:var(--teal-bg);color:var(--teal);font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-bottom:10px;}
+.doc-qual{font-size:.8rem;color:var(--gray);margin-bottom:10px;}
+.doc-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;}
+.doc-meta-item{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--gray);}
+.doc-meta-item strong{color:var(--text);font-weight:600;}
+.stars{color:#f5a623;font-size:12px;}
+.doc-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:160px;}
+.fee-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);font-weight:600;}
+.fee-amount{font-size:1.45rem;font-weight:700;color:var(--navy);line-height:1.1;}
+.fee-currency{font-size:.88rem;font-weight:600;color:var(--teal);}
+.avail-pill{font-size:.76rem;font-weight:600;padding:4px 11px;border-radius:20px;}
+.avail-pill.yes{background:rgba(34,168,110,.1);color:var(--green);border:1px solid rgba(34,168,110,.25);}
+.avail-pill.no{background:rgba(224,84,84,.08);color:var(--red);border:1px solid rgba(224,84,84,.2);}
+.btn-book{width:100%;padding:10px 18px;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:10px;font-size:.875rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;box-shadow:0 4px 12px rgba(10,144,125,.28);text-decoration:none;display:block;text-align:center;}
+.btn-book:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,144,125,.36);}
+.btn-profile{width:100%;padding:9px 18px;background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:10px;font-size:.875rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;text-decoration:none;display:block;text-align:center;}
+.btn-profile:hover{background:var(--teal-bg);}
+.no-results{text-align:center;padding:60px 20px;}
+.no-results .emoji{font-size:48px;display:block;margin-bottom:14px;}
+.no-results h3{font-size:1.1rem;font-weight:700;margin-bottom:7px;color:var(--navy);}
+.no-results p{color:var(--gray);font-size:.88rem;}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.doc-card{grid-template-columns:auto 1fr;}.doc-right{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:center;}.nav-right a:not(.nav-btn){display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="{{ url_for('home') }}" class="logo"><div class="logo-mark">M+</div><span class="logo-text">Medicare<span>Pro</span></span></a>
+  <div class="nav-right">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('find_doctors') }}" class="active">Doctors</a>
+    <a href="{{ url_for('book_appointment') }}" class="nav-btn">Book Appointment</a>
+    <a href="{{ url_for('dashboard') }}" style="color:var(--teal2);">⚙ Admin</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="{{ url_for('home') }}">Home</a><span>/</span><span>Doctors</span></div>
+  <h1>Find Your Doctor</h1>
+  <p>Browse {{ doctors|length }} verified specialists. Book appointments online in seconds.</p>
+</div>
+
+<div class="search-wrap">
+  <form method="GET" action="{{ url_for('find_doctors') }}">
+  <div class="search-bar">
+    <span style="font-size:17px;opacity:.4;">🔍</span>
+    <input type="text" name="q" value="{{ q }}" placeholder="Search by doctor name, specialization or condition…"/>
+    <button type="submit" class="search-btn">Search</button>
+  </div>
+  </form>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR FILTERS -->
+  <aside class="sidebar">
+    <div class="filter-card">
+      <div class="filter-title">Specialization</div>
+      {% set all_specs = specializations|map(attribute='specialization')|list %}
+      <a href="{{ url_for('find_doctors', q=q) }}" style="text-decoration:none;">
+        <div class="filter-item {% if not spec %}active{% endif %}">
+          <div class="filter-dot"></div>
+          <span class="filter-label">All Specializations</span>
+          <span class="filter-count">{{ doctors|length }}</span>
+        </div>
+      </a>
+      {% for s in specializations %}
+      <a href="{{ url_for('find_doctors', q=q, spec=s['specialization']) }}" style="text-decoration:none;">
+        <div class="filter-item {% if spec==s['specialization'] %}active{% endif %}">
+          <div class="filter-dot"></div>
+          <span class="filter-label">{{ s['specialization'] }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-title">Quick Links</div>
+      <a href="{{ url_for('book_appointment') }}" style="text-decoration:none;">
+        <div class="filter-item"><div class="filter-dot" style="background:#f59e0b;"></div><span class="filter-label">📅 Book Appointment</span></div>
+      </a>
+      <a href="{{ url_for('home') }}" style="text-decoration:none;">
+        <div class="filter-item"><div class="filter-dot" style="background:#3b82f6;"></div><span class="filter-label">🏠 Back to Home</span></div>
+      </a>
+      <a href="{{ url_for('dashboard') }}" style="text-decoration:none;">
+        <div class="filter-item"><div class="filter-dot" style="background:#8b5cf6;"></div><span class="filter-label">⚙️ Admin Panel</span></div>
+      </a>
+    </div>
+  </aside>
+
+  <!-- DOCTOR LISTINGS -->
+  <div class="main-content">
+    <div class="results-bar">
+      <div class="results-info"><strong>{{ doctors|length }}</strong> Doctor{{ 's' if doctors|length != 1 }} Found{% if q %} for "{{ q }}"{% endif %}{% if spec %} in {{ spec }}{% endif %}</div>
+    </div>
+
+    {% if doctors %}
+    {% set bg_list = ['#ddf0ed','#fde9da','#dde7fd','#e2f9e6','#f5e6fd','#fdf5e6'] %}
+    {% for d in doctors %}
+    <div class="doc-card" style="animation-delay:{{ loop.index0 * 0.06 }}s">
+      <div class="doc-photo" style="background:{{ bg_list[loop.index0 % 6] }};">{{ '👨‍⚕️' if loop.index0 % 2==0 else '👩‍⚕️' }}</div>
+      <div class="doc-info">
+        <div class="doc-name">Dr. {{ d['name'] }}</div>
+        <div class="doc-spec">{{ d['specialization'] or 'General' }}</div>
+        <div class="doc-qual">🎓 {{ d['qualification'] or 'MBBS' }}</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:10px;">
+          <span class="stars">★★★★★</span>
+          <span style="font-size:.83rem;font-weight:700;color:var(--text);">4.8</span>
+          <span style="font-size:.75rem;color:var(--gray);">(120+ reviews)</span>
+        </div>
+        <div class="doc-meta">
+          <div class="doc-meta-item">🏥 <strong>{{ d['experience'] or '—' }} Years</strong> Exp.</div>
+          <div class="doc-meta-item">📅 {{ d['schedule'] or 'Mon-Fri' }}</div>
+          <div class="doc-meta-item">📞 {{ d['phone'] or '—' }}</div>
+        </div>
+      </div>
+      <div class="doc-right">
+        <div>
+          <div class="fee-label">Consultation Fee</div>
+          <div class="fee-amount"><span class="fee-currency">$</span>{{ '%.0f'|format(d['fee'] or 0) }}</div>
+        </div>
+        <span class="avail-pill yes">✓ Available</span>
+        <a href="{{ url_for('book_appointment') }}?doctor=Dr.+{{ d['name']|urlencode }}" class="btn-book">📅 Book Appointment</a>
+        <a href="{{ url_for('doctor_profile', did=d['id']) }}" class="btn-profile">View Profile</a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="no-results">
+      <span class="emoji">🔍</span>
+      <h3>No doctors found</h3>
+      <p>Try adjusting your search or select a different specialization.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>
