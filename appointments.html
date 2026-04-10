@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block page_title %}Appointment Schedule{% endblock %}
+{% block breadcrumb %}Appointments{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><div class="ph-title">Appointment <em>Schedule</em></div><div class="ph-sub">{{ appointments|length }} results</div></div>
+  <div class="ph-right">
+    <a href="{{ url_for('book_appointment') }}" class="btn btn-ghost">🌐 Public Booking</a>
+    <a href="{{ url_for('add_appointment') }}" class="btn btn-primary">➕ New Appointment</a>
+  </div>
+</div>
+
+<div class="stat-row" style="grid-template-columns:repeat(5,1fr);">
+  <div class="stat-card c-teal"><div class="sc-icon">📅</div><div class="sc-label">Total</div><div class="sc-val">{{ stats.total }}</div></div>
+  <div class="stat-card c-green"><div class="sc-icon">✅</div><div class="sc-label">Confirmed</div><div class="sc-val">{{ stats.confirmed }}</div></div>
+  <div class="stat-card c-gold"><div class="sc-icon">⏳</div><div class="sc-label">Pending</div><div class="sc-val">{{ stats.pending }}</div></div>
+  <div class="stat-card c-red"><div class="sc-icon">✕</div><div class="sc-label">Cancelled</div><div class="sc-val">{{ stats.cancelled }}</div></div>
+  <div class="stat-card c-blue"><div class="sc-icon">🏁</div><div class="sc-label">Completed</div><div class="sc-val">{{ stats.completed }}</div></div>
+</div>
+
+<div class="table-panel">
+  <form method="GET">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="s-ico">🔍</span>
+      <input type="text" name="q" value="{{ q }}" placeholder="Search patient, doctor…"/>
+    </div>
+    <select name="status" class="fsel" onchange="this.form.submit()">
+      <option value="">All Statuses</option>
+      {% for s in ['Confirmed','Pending','Cancelled','Completed','Rescheduled'] %}
+      <option value="{{ s }}" {% if status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+    <input type="date" name="date" value="{{ date_filter }}" class="fsel" onchange="this.form.submit()" style="cursor:pointer;"/>
+    <button type="submit" class="btn btn-ghost btn-sm">🔍 Filter</button>
+    {% if q or status or date_filter %}<a href="{{ url_for('appointments') }}" class="btn btn-ghost btn-sm">✕ Clear</a>{% endif %}
+  </div>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for a in appointments %}
+        <tr style="animation-delay:{{ loop.index0 * 0.025 }}s">
+          <td><span style="font-family:monospace;font-size:.72rem;color:var(--text3);">APT-{{ '%03d'|format(a['id']) }}</span></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:9px;">
+              <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#00c9a7,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;">{{ (a['name'] or 'UN')[:2].upper() }}</div>
+              <div>
+                <strong>{{ a['name'] }}</strong>
+                <div style="font-size:.67rem;color:var(--text3);">{{ a['visit_type'] or 'In-Clinic' }}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:.81rem;color:var(--text2);">{{ a['doctor'] or '—' }}</td>
+          <td>
+            <div style="font-size:.82rem;font-weight:600;color:var(--text);">{{ a['date'] or '—' }}</div>
+            <div style="font-size:.72rem;color:var(--teal);font-weight:700;">⏰ {{ a['time'] or '—' }}</div>
+          </td>
+          <td>
+            <span style="padding:3px 9px;border-radius:7px;font-size:.7rem;font-weight:700;background:{% if a['visit_type']=='Video' %}rgba(59,130,246,.1){% elif a['visit_type']=='Phone' %}rgba(251,191,36,.1){% else %}rgba(0,201,167,.1){% endif %};color:{% if a['visit_type']=='Video' %}var(--blue){% elif a['visit_type']=='Phone' %}var(--gold){% else %}var(--teal){% endif %};">
+              {{ {'In-Clinic':'🏥','Video':'💻','Phone':'📞'}.get(a['visit_type'],'🏥') }} {{ a['visit_type'] or 'In-Clinic' }}
+            </span>
+          </td>
+          <td><span class="pill pill-{{ a['status'].lower().replace(' ','-') }}"><span class="pill-dot"></span>{{ a['status'] }}</span></td>
+          <td>
+            <div class="act-btns">
+              <!-- Quick status update -->
+              {% if a['status'] == 'Pending' %}
+              <form method="POST" action="{{ url_for('update_appointment_status', aid=a['id']) }}" style="display:inline;">
+                <input type="hidden" name="status" value="Confirmed"/>
+                <button type="submit" class="act-btn ab-success">✓ Confirm</button>
+              </form>
+              {% endif %}
+              {% if a['status'] not in ['Cancelled','Completed'] %}
+              <form method="POST" action="{{ url_for('update_appointment_status', aid=a['id']) }}" style="display:inline;">
+                <input type="hidden" name="status" value="Cancelled"/>
+                <button type="submit" class="act-btn ab-warn">✕ Cancel</button>
+              </form>
+              {% endif %}
+              <form method="POST" action="{{ url_for('delete_appointment', aid=a['id']) }}" style="display:inline;" onsubmit="return confirm('Delete appointment?')">
+                <button type="submit" class="act-btn ab-del">🗑</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3);">📭 No appointments found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer"><span>{{ appointments|length }} record(s)</span></div>
+</div>
+{% endblock %}

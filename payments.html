@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Payments{% endblock %}
+{% block page_title %}Payment History{% endblock %}
+{% block breadcrumb %}Payments{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><div class="ph-title">Payment <em>History</em></div><div class="ph-sub">{{ payments|length }} transactions</div></div>
+  <a href="{{ url_for('add_payment') }}" class="btn btn-primary">➕ Record Payment</a>
+</div>
+
+<div class="stat-row" style="grid-template-columns:repeat(4,1fr);">
+  <div class="stat-card c-teal"><div class="sc-icon">🔄</div><div class="sc-label">Total Txns</div><div class="sc-val">{{ stats.total }}</div></div>
+  <div class="stat-card c-green"><div class="sc-icon">💰</div><div class="sc-label">Collected</div><div class="sc-val">${{ "{:,.0f}".format(stats.paid) }}</div></div>
+  <div class="stat-card c-gold"><div class="sc-icon">⏳</div><div class="sc-label">Pending</div><div class="sc-val">${{ "{:,.0f}".format(stats.pending) }}</div></div>
+  <div class="stat-card c-purple"><div class="sc-icon">↩️</div><div class="sc-label">Refunded</div><div class="sc-val">${{ "{:,.0f}".format(stats.refunded) }}</div></div>
+</div>
+
+<div class="table-panel">
+  <form method="GET">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="s-ico">🔍</span>
+      <input type="text" name="q" value="{{ q }}" placeholder="Search patient, type…"/>
+    </div>
+    <select name="status" class="fsel" onchange="this.form.submit()">
+      <option value="">All Statuses</option>
+      {% for s in ['Paid','Pending','Failed','Refunded','Partial'] %}
+      <option value="{{ s }}" {% if status==s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+    <select name="method" class="fsel" onchange="this.form.submit()">
+      <option value="">All Methods</option>
+      {% for m in ['Cash','Card','Insurance','Online','Easypaisa','JazzCash'] %}
+      <option value="{{ m }}" {% if method==m %}selected{% endif %}>{{ m }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-ghost btn-sm">🔍 Filter</button>
+    {% if q or status or method %}<a href="{{ url_for('payments') }}" class="btn btn-ghost btn-sm">✕ Clear</a>{% endif %}
+  </div>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Patient</th><th>Amount</th><th>Type</th><th>Method</th><th>Status</th><th>Date</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr style="animation-delay:{{ loop.index0 * 0.025 }}s">
+          <td><span style="font-family:monospace;font-size:.72rem;color:var(--text3);">INV-{{ '%04d'|format(p['id']) }}</span></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:9px;">
+              <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;">{{ (p['patient'] or 'UN')[:2].upper() }}</div>
+              <strong>{{ p['patient'] or '—' }}</strong>
+            </div>
+          </td>
+          <td>
+            <span style="font-size:.95rem;font-weight:800;color:{% if p['status']=='Refunded' %}var(--red){% else %}var(--text){% endif %};">
+              {% if p['status']=='Refunded' %}–{% endif %}<span style="font-size:.73rem;color:var(--teal2);font-weight:600;">$</span>{{ '{:,.2f}'.format(p['amount'] or 0) }}
+            </span>
+          </td>
+          <td>
+            <span style="padding:3px 9px;border-radius:7px;font-size:.7rem;font-weight:700;background:rgba(0,201,167,.1);color:var(--teal);border:1px solid var(--tb);">🩺 {{ p['payment_type'] or '—' }}</span>
+          </td>
+          <td>
+            <span style="padding:3px 9px;border-radius:7px;font-size:.72rem;font-weight:600;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);">
+              {{ {'Cash':'💵','Card':'💳','Insurance':'🏦','Online':'💻','Easypaisa':'📱','JazzCash':'📱'}.get(p['method'],'💳') }} {{ p['method'] or '—' }}
+            </span>
+          </td>
+          <td><span class="pill pill-{{ p['status'].lower() }}"><span class="pill-dot"></span>{{ p['status'] }}</span></td>
+          <td style="font-size:.73rem;color:var(--text3);">{{ p['pay_date'][:10] if p['pay_date'] else '—' }}</td>
+          <td>
+            <div class="act-btns">
+              <form method="POST" action="{{ url_for('delete_payment', pid=p['id']) }}" style="display:inline;" onsubmit="return confirm('Delete this payment record?')">
+                <button type="submit" class="act-btn ab-del">🗑</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text3);">📭 No payments found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer"><span>{{ payments|length }} record(s)</span></div>
+</div>
+{% endblock %}

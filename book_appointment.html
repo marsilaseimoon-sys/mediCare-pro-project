@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book Appointment – MediCare Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0b1d35;--navy2:#0f2648;--teal:#0a8f7c;--teal2:#0dbea8;--teal-bg:rgba(10,143,124,.07);--teal-bd:rgba(10,143,124,.25);--teal-glow:rgba(10,143,124,.18);--cream:#f3f6fb;--white:#fff;--border:#dde3ee;--gray:#7a8899;--text:#1a2b3c;--green:#1aa86a;--red:#e04a4a;--sh-sm:0 2px 10px rgba(11,29,53,.07);--sh-md:0 8px 32px rgba(11,29,53,.11);--sh-lg:0 24px 64px rgba(11,29,53,.16);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);}
+nav{position:sticky;top:0;z-index:200;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;border-bottom:1px solid rgba(13,190,168,.18);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}.logo-mark{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;font-weight:700;}.logo-text{font-size:1.05rem;font-weight:600;color:#fff;}.logo-text span{color:var(--teal2);}
+.nav-links{display:flex;align-items:center;gap:26px;}.nav-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.84rem;font-weight:500;transition:color .2s;}.nav-links a:hover{color:#fff;}
+.nav-links a.active{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff !important;padding:9px 18px;border-radius:8px;font-weight:600 !important;}
+/* BANNER */
+.banner{background:var(--navy);background-image:radial-gradient(ellipse at 75% 50%,rgba(13,190,168,.13) 0%,transparent 58%);padding:44px 5% 40px;position:relative;overflow:hidden;}
+.banner-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(13,190,168,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(13,190,168,.04) 1px,transparent 1px);background-size:52px 52px;}
+.banner-inner{position:relative;z-index:2;}
+.banner-breadcrumb{display:flex;align-items:center;gap:8px;font-size:.76rem;color:rgba(255,255,255,.35);margin-bottom:14px;}
+.banner-breadcrumb a{color:var(--teal2);text-decoration:none;}
+.banner h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:6px;}
+.banner p{color:rgba(255,255,255,.5);font-size:.9rem;}
+/* FLASH */
+.flash-wrap{max-width:1140px;margin:0 auto;padding:20px 5% 0;}
+.flash{display:flex;align-items:center;gap:10px;padding:13px 18px;border-radius:11px;font-size:.83rem;font-weight:600;margin-bottom:8px;}
+.flash.success{background:rgba(26,168,106,.1);border:1px solid rgba(26,168,106,.25);color:var(--green);}
+/* LAYOUT */
+.page-wrap{max-width:1140px;margin:0 auto;padding:34px 5% 70px;display:grid;grid-template-columns:1fr 330px;gap:26px;align-items:start;}
+/* FORM CARD */
+.form-card{background:#fff;border-radius:22px;border:1px solid var(--border);box-shadow:var(--sh-md);overflow:hidden;}
+.form-card-header{padding:26px 34px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafcff;}
+.fch-left h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.fch-left p{font-size:.82rem;color:var(--gray);}
+.fch-badge{display:flex;align-items:center;gap:6px;background:rgba(26,168,106,.08);border:1px solid rgba(26,168,106,.22);border-radius:20px;padding:5px 13px;font-size:.74rem;font-weight:700;color:var(--green);}
+.fch-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(26,168,106,.5);}50%{box-shadow:0 0 0 4px rgba(26,168,106,0);}}
+.form-body{padding:30px 34px 34px;}
+.form-section{margin-bottom:30px;}
+.form-section-title{display:flex;align-items:center;gap:9px;font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:18px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+.form-section-title .sec-icon{width:27px;height:27px;border-radius:7px;background:var(--teal-bg);border:1px solid var(--teal-bd);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.field-row.single{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:.76rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;}
+.field label .req{color:var(--teal);}
+.inp-wrap{position:relative;}
+.inp-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;opacity:.45;}
+.inp-wrap input,.inp-wrap select,.inp-wrap textarea{width:100%;padding:11px 13px 11px 38px;border:1.5px solid var(--border);border-radius:11px;outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);background:#fff;transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none;}
+.inp-wrap input::placeholder,.inp-wrap textarea::placeholder{color:#b0bac8;}
+.inp-wrap input:focus,.inp-wrap select:focus,.inp-wrap textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow);}
+.inp-wrap textarea{resize:vertical;min-height:90px;line-height:1.6;padding-top:12px;}
+.inp-wrap .textarea-icon{position:absolute;left:12px;top:13px;font-size:14px;pointer-events:none;opacity:.45;}
+.select-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--gray);opacity:.7;}
+/* visit pills */
+.visit-pills{display:flex;gap:10px;flex-wrap:wrap;}
+.visit-pill{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;cursor:pointer;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text);transition:all .2s;user-select:none;}
+.visit-pill:hover,.visit-pill.active{border-color:var(--teal);background:var(--teal-bg);color:var(--teal);}
+.vp-fee{font-size:.72rem;color:var(--gray);}
+.visit-pill.active .vp-fee{color:var(--teal);}
+/* confirm section */
+.confirm-section{padding:22px 34px 30px;border-top:1px solid var(--border);background:#fafcff;}
+.confirm-summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.cs-tag{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:var(--teal-bg);border:1px solid var(--teal-bd);font-size:.76rem;font-weight:600;color:var(--teal);}
+.btn-confirm{width:100%;padding:15px;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;border:none;border-radius:13px;font-size:.98rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.01em;box-shadow:0 8px 26px rgba(10,143,124,.38);transition:all .22s;display:flex;align-items:center;justify-content:center;gap:9px;}
+.btn-confirm:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(10,143,124,.46);}
+/* sidebar */
+.sidebar{display:flex;flex-direction:column;gap:19px;}
+.info-card{background:#fff;border-radius:18px;border:1px solid var(--border);padding:22px;box-shadow:var(--sh-sm);}
+.ic-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.ic-title::after{content:'';flex:1;height:1px;background:var(--border);}
+/* summary card */
+.sum-card{background:var(--navy);background-image:radial-gradient(ellipse at 90% 10%,rgba(13,190,168,.15) 0%,transparent 55%);border:none;}
+.sum-card .ic-title{color:rgba(255,255,255,.4);}
+.sum-card .ic-title::after{background:rgba(255,255,255,.08);}
+.sum-rows{display:flex;flex-direction:column;gap:13px;}
+.sum-row{display:flex;align-items:flex-start;gap:11px;}
+.sum-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:rgba(13,190,168,.12);border:1px solid rgba(13,190,168,.2);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.sum-label{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:2px;}
+.sum-value{font-size:.88rem;color:#fff;font-weight:600;}
+.sum-divider{height:1px;background:rgba(255,255,255,.07);}
+.sum-fee-row{display:flex;align-items:center;justify-content:space-between;padding-top:4px;}
+.sum-fee-label{font-size:.78rem;color:rgba(255,255,255,.45);font-weight:600;}
+.sum-fee-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#fff;line-height:1;}
+.sum-fee-val em{font-size:.9rem;color:var(--teal2);font-style:normal;font-family:'DM Sans',sans-serif;}
+.tip-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:11px;font-size:.8rem;line-height:1.55;color:#4a5d6e;}
+.tip-item:last-child{margin-bottom:0;}
+.tip-item strong{color:var(--navy);}
+.contact-row{display:flex;align-items:center;gap:11px;margin-bottom:11px;}
+.contact-row:last-child{margin-bottom:0;}
+.contact-icon{width:34px;height:34px;border-radius:8px;flex-shrink:0;background:var(--teal-bg);border:1px solid var(--teal-bd);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.contact-label{font-size:.7rem;color:var(--gray);}
+.contact-val{font-size:.85rem;color:var(--navy);font-weight:600;}
+/* doctor option */
+.doctor-option{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:12px;cursor:pointer;border:1.5px solid var(--border);background:#fff;transition:all .2s;margin-bottom:9px;}
+.doctor-option:hover{border-color:var(--teal-bd);background:var(--teal-bg);}
+.doctor-option.selected{border-color:var(--teal);background:var(--teal-bg);box-shadow:0 4px 12px rgba(10,143,124,.2);}
+.do-avatar{width:44px;height:44px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.do-name{font-size:.9rem;font-weight:700;color:var(--navy);}
+.do-spec{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--teal);}
+.do-fee{font-size:.82rem;font-weight:700;color:var(--navy);margin-left:auto;}
+.do-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s;flex-shrink:0;}
+.doctor-option.selected .do-check{background:linear-gradient(135deg,var(--teal),var(--teal2));border-color:transparent;color:#fff;}
+@media(max-width:940px){.page-wrap{grid-template-columns:1fr;}.sidebar{display:grid;grid-template-columns:1fr 1fr;}.sum-card{grid-column:1/-1;}.field-row{grid-template-columns:1fr;}.form-card-header{flex-direction:column;align-items:flex-start;gap:10px;}}
+@media(max-width:540px){.form-body{padding:22px 18px;}.confirm-section{padding:18px;}.visit-pills{flex-direction:column;}.sidebar{grid-template-columns:1fr;}.nav-links a:not(.active){display:none;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="{{ url_for('home') }}" class="logo"><div class="logo-mark">M+</div><span class="logo-text">Medicare<span>Pro</span></span></a>
+  <div class="nav-links">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('find_doctors') }}">Doctors</a>
+    <a href="{{ url_for('book_appointment') }}" class="active">Book Appointment</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <div class="banner-grid"></div>
+  <div class="banner-inner">
+    <div class="banner-breadcrumb"><a href="{{ url_for('home') }}">Home</a><span>/</span><span>Book Appointment</span></div>
+    <h1>Book an Appointment</h1>
+    <p>Fill in the details below — takes less than 2 minutes.</p>
+  </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-wrap">
+  {% for cat, msg in messages %}
+  <div class="flash {{ cat }}">{% if cat=='success' %}✅{% else %}ℹ️{% endif %} {{ msg }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="page-wrap">
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="fch-left">
+        <h2>Appointment Details</h2>
+        <p>All fields marked <span style="color:var(--teal);font-weight:700;">✦</span> are required</p>
+      </div>
+      <div class="fch-badge"><div class="fch-badge-dot"></div>Slots Available Today</div>
+    </div>
+
+    <form method="POST" id="bookForm">
+    <div class="form-body">
+
+      <!-- Patient Info -->
+      <div class="form-section">
+        <div class="form-section-title"><span class="sec-icon">👤</span>Patient Information</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Full Name <span class="req">✦</span></label>
+            <div class="inp-wrap"><span class="inp-icon">👤</span><input type="text" name="name" required placeholder="Full name e.g. John Smith" id="inp-name" oninput="updateSummary()"/></div>
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">✦</span></label>
+            <div class="inp-wrap"><span class="inp-icon">📞</span><input type="tel" name="phone" required placeholder="+1 (555) 000-0000" id="inp-phone" oninput="updateSummary()"/></div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Email Address</label>
+            <div class="inp-wrap"><span class="inp-icon">✉️</span><input type="email" placeholder="john@example.com"/></div>
+          </div>
+          <div class="field">
+            <label>Age</label>
+            <div class="inp-wrap"><span class="inp-icon">🎂</span><input type="number" placeholder="e.g. 34" min="1" max="120"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Select Doctor -->
+      <div class="form-section">
+        <div class="form-section-title"><span class="sec-icon">🩺</span>Select Doctor <span class="req" style="font-size:.69rem;font-weight:700;color:var(--teal);margin-left:4px;">✦</span></div>
+        {% set bg_list = ['#ddf0ed','#fde9da','#dde7fd','#e2f9e6','#f5e6fd','#fdf5e6'] %}
+        {% for d in doctors %}
+        <div class="doctor-option {% if loop.first %}selected{% endif %}" onclick="selectDoc(this,'Dr. {{ d['name'] }}',{{ d['fee'] or 0 }})">
+          <div class="do-avatar" style="background:{{ bg_list[loop.index0 % 6] }};">{{ '👨‍⚕️' if loop.index0 % 2==0 else '👩‍⚕️' }}</div>
+          <div>
+            <div class="do-name">Dr. {{ d['name'] }}</div>
+            <div class="do-spec">{{ d['specialization'] }}</div>
+          </div>
+          <div class="do-fee">${{ '%.0f'|format(d['fee'] or 0) }}</div>
+          <div class="do-check">✓</div>
+        </div>
+        {% endfor %}
+        <input type="hidden" name="doctor" id="inp-doctor" value="Dr. {{ doctors[0]['name'] if doctors else '' }}" required/>
+        <input type="hidden" name="doctor_fee" id="inp-fee" value="{{ doctors[0]['fee'] if doctors else 0 }}"/>
+      </div>
+
+      <!-- Visit Type -->
+      <div class="form-section">
+        <div class="form-section-title"><span class="sec-icon">🏥</span>Visit Type</div>
+        <div class="visit-pills">
+          <div class="visit-pill active" onclick="selectVisit(this,'In-Clinic')">🏥 In-Clinic <span class="vp-fee">Full Fee</span></div>
+          <div class="visit-pill" onclick="selectVisit(this,'Video')">💻 Video <span class="vp-fee">-28%</span></div>
+          <div class="visit-pill" onclick="selectVisit(this,'Phone')">📞 Phone <span class="vp-fee">-52%</span></div>
+        </div>
+        <input type="hidden" name="visit_type" id="inp-visit" value="In-Clinic"/>
+      </div>
+
+      <!-- Date & Time -->
+      <div class="form-section">
+        <div class="form-section-title"><span class="sec-icon">📅</span>Date & Time <span class="req" style="font-size:.69rem;font-weight:700;color:var(--teal);margin-left:4px;">✦</span></div>
+        <div class="field-row">
+          <div class="field">
+            <label>Appointment Date <span class="req">✦</span></label>
+            <div class="inp-wrap"><span class="inp-icon">📅</span><input type="date" name="date" required id="inp-date" onchange="updateSummary()"/></div>
+          </div>
+          <div class="field">
+            <label>Preferred Time <span class="req">✦</span></label>
+            <div class="inp-wrap">
+              <span class="inp-icon">⏰</span>
+              <select name="time" required id="inp-time" onchange="updateSummary()">
+                {% for t in ['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','05:00 PM','05:30 PM','06:00 PM'] %}
+                <option value="{{ t }}">{{ t }}</option>
+                {% endfor %}
+              </select>
+              <span class="select-arrow">▾</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reason -->
+      <div class="form-section" style="margin-bottom:0;">
+        <div class="form-section-title"><span class="sec-icon">📋</span>Reason for Visit <span class="req" style="font-size:.69rem;font-weight:700;color:var(--teal);margin-left:4px;">✦</span></div>
+        <div class="field">
+          <div class="inp-wrap"><span class="textarea-icon">📋</span><textarea name="reason" required placeholder="Describe your symptoms or the purpose of your visit…"></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-section">
+      <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:11px;">Booking Summary</div>
+      <div class="confirm-summary">
+        <span class="cs-tag" id="cs-doc">🩺 {{ 'Dr. '+doctors[0]['name'] if doctors else 'No doctor' }}</span>
+        <span class="cs-tag" id="cs-date">📅 Select date</span>
+        <span class="cs-tag" id="cs-time">⏰ 09:00 AM</span>
+        <span class="cs-tag" id="cs-visit">🏥 In-Clinic</span>
+      </div>
+      <button type="submit" class="btn-confirm"><span class="btn-icon">📅</span>Confirm Appointment</button>
+    </div>
+    </form>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="info-card sum-card">
+      <div class="ic-title">Your Booking</div>
+      <div class="sum-rows">
+        <div class="sum-row"><div class="sum-icon">👤</div><div><div class="sum-label">Patient</div><div class="sum-value" id="sb-name" style="color:rgba(255,255,255,.3);font-style:italic;">Not entered</div></div></div>
+        <div class="sum-row"><div class="sum-icon">🩺</div><div><div class="sum-label">Doctor</div><div class="sum-value" id="sb-doc">{{ 'Dr. '+doctors[0]['name'] if doctors else '—' }}</div></div></div>
+        <div class="sum-row"><div class="sum-icon">📅</div><div><div class="sum-label">Date & Time</div><div class="sum-value" id="sb-datetime" style="color:rgba(255,255,255,.3);font-style:italic;">Not selected</div></div></div>
+        <div class="sum-row"><div class="sum-icon">🏥</div><div><div class="sum-label">Visit Type</div><div class="sum-value" id="sb-type">In-Clinic</div></div></div>
+        <div class="sum-divider"></div>
+        <div class="sum-fee-row"><div class="sum-fee-label">Consultation Fee</div><div class="sum-fee-val"><em>$</em><span id="sb-fee">{{ '%.0f'|format(doctors[0]['fee'] or 0) if doctors else 0 }}</span></div></div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">Before Your Visit</div>
+      <div class="tip-item"><span>📄</span><span><strong>Bring your ID</strong> and any previous medical records or test results.</span></div>
+      <div class="tip-item"><span>⏰</span><span><strong>Arrive 10 minutes early</strong> to complete check-in paperwork.</span></div>
+      <div class="tip-item"><span>💊</span><span><strong>List your medications</strong> — bring a current list of all prescriptions.</span></div>
+      <div class="tip-item"><span>🚫</span><span><strong>Cancellation:</strong> Please cancel at least 24 hours in advance.</span></div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-title">Need Help?</div>
+      <div class="contact-row"><div class="contact-icon">📞</div><div><div class="contact-label">Phone</div><div class="contact-val">+1 (800) 624-3377</div></div></div>
+      <div class="contact-row"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-val">care@medicarepro.com</div></div></div>
+      <div class="contact-row"><div class="contact-icon">🕐</div><div><div class="contact-label">Support Hours</div><div class="contact-val">Mon–Sat, 8AM – 8PM</div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selFee = {{ doctors[0]['fee'] if doctors else 0 }};
+let selVisit = 'In-Clinic';
+let selDoc = '{{ ("Dr. "+doctors[0]['name']) if doctors else "" }}';
+
+function selectDoc(el, name, fee) {
+  document.querySelectorAll('.doctor-option').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('inp-doctor').value = name;
+  document.getElementById('inp-fee').value = fee;
+  selDoc = name; selFee = fee;
+  document.getElementById('cs-doc').textContent = '🩺 ' + name;
+  document.getElementById('sb-doc').textContent = name;
+  updateFee();
+}
+
+function selectVisit(el, type) {
+  document.querySelectorAll('.visit-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('inp-visit').value = type;
+  selVisit = type;
+  document.getElementById('cs-visit').textContent = ({'In-Clinic':'🏥','Video':'💻','Phone':'📞'}[type] || '🏥') + ' ' + type;
+  document.getElementById('sb-type').textContent = type;
+  updateFee();
+}
+
+function updateFee() {
+  let fee = selFee;
+  if (selVisit === 'Video') fee = Math.round(fee * 0.72);
+  if (selVisit === 'Phone') fee = Math.round(fee * 0.48);
+  document.getElementById('sb-fee').textContent = fee;
+}
+
+function updateSummary() {
+  const name = document.getElementById('inp-name').value.trim();
+  const date = document.getElementById('inp-date').value;
+  const time = document.getElementById('inp-time').value;
+  const sbName = document.getElementById('sb-name');
+  if (name) { sbName.textContent = name; sbName.style.color = '#fff'; sbName.style.fontStyle = ''; }
+  else { sbName.textContent = 'Not entered'; sbName.style.color = 'rgba(255,255,255,.3)'; sbName.style.fontStyle = 'italic'; }
+  const sbDT = document.getElementById('sb-datetime');
+  if (date && time) { sbDT.textContent = date + ' ' + time; sbDT.style.color = '#fff'; sbDT.style.fontStyle = ''; }
+  else { sbDT.textContent = 'Not selected'; sbDT.style.color = 'rgba(255,255,255,.3)'; sbDT.style.fontStyle = 'italic'; }
+  if (date) document.getElementById('cs-date').textContent = '📅 ' + date;
+  if (time) document.getElementById('cs-time').textContent = '⏰ ' + time;
+}
+
+// Set today as default date
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('inp-date').value = today;
+updateSummary();
+</script>
+</body>
+</html>
