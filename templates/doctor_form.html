@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Doctor{% endblock %}
+{% block page_title %}{{ action }} Doctor{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('doctors') }}">Doctors</a><span class="bc-sep">/</span>{{ action }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div><div class="ph-title">{{ action }} <em>Doctor</em></div></div>
+  <a href="{{ url_for('doctors') }}" class="btn btn-ghost">← Back</a>
+</div>
+<div style="max-width:820px;">
+<form method="POST">
+  <div class="form-card">
+    <div class="form-card-head">
+      <div class="form-card-title">Doctor Profile</div>
+      <div class="form-card-sub">Fields marked ✦ are required</div>
+    </div>
+    <div class="form-body">
+      <div class="form-grid">
+        <div class="form-divider">Personal Information</div>
+        <div class="fg">
+          <label>Doctor Name <span class="req">✦</span></label>
+          <input type="text" name="name" class="finp" required placeholder="Full name (without Dr.)"
+                 value="{{ doctor['name'] if doctor else '' }}"/>
+        </div>
+        <div class="fg">
+          <label>Specialization <span class="req">✦</span></label>
+          <select name="specialization" class="fsel2" required>
+            <option value="">Select specialization</option>
+            {% for s in ['General Physician','Cardiologist','Orthopedic Surgeon','Dermatologist','ENT Specialist','Gynecologist','Neurologist','Pediatrician','Psychiatrist','Ophthalmologist','Urologist','Oncologist','Other'] %}
+            <option value="{{ s }}" {% if doctor and doctor['specialization']==s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Qualification</label>
+          <input type="text" name="qualification" class="finp" placeholder="e.g. MBBS, MD"
+                 value="{{ doctor['qualification'] if doctor else '' }}"/>
+        </div>
+        <div class="fg">
+          <label>Experience (years)</label>
+          <input type="number" name="experience" class="finp" placeholder="e.g. 10" min="0"
+                 value="{{ doctor['experience'] if doctor else '' }}"/>
+        </div>
+        <div class="fg">
+          <label>Phone</label>
+          <input type="tel" name="phone" class="finp" placeholder="+1 (555) 000-0000"
+                 value="{{ doctor['phone'] if doctor else '' }}"/>
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" name="email" class="finp" placeholder="doctor@clinic.com"
+                 value="{{ doctor['email'] if doctor else '' }}"/>
+        </div>
+        <div class="form-divider">Schedule & Status</div>
+        <div class="fg">
+          <label>Schedule</label>
+          <select name="schedule" class="fsel2">
+            <option value="">Select schedule</option>
+            {% for s in ['Mon-Fri 9AM-5PM','Mon-Sat 9AM-6PM','Mon-Wed-Fri','Tue-Thu-Sat','Weekends Only','On-Call'] %}
+            <option value="{{ s }}" {% if doctor and doctor['schedule']==s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Consultation Fee ($)</label>
+          <input type="number" name="fee" class="finp" placeholder="e.g. 200" step="0.01"
+                 value="{{ doctor['fee'] if doctor else '' }}"/>
+        </div>
+        <div class="fg">
+          <label>Status</label>
+          <select name="status" class="fsel2">
+            {% for s in ['Active','On Leave','Resigned'] %}
+            <option value="{{ s }}" {% if doctor and doctor['status']==s %}selected{% elif not doctor and s=='Active' %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <a href="{{ url_for('doctors') }}" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary">💾 Save Doctor</button>
+    </div>
+  </div>
+</form>
+</div>
+{% endblock %}
